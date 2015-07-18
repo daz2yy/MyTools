@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="ReNameFile.exe" version="1.0.0.0" publicKeyToken="e9b0299972d1c46c" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="ReNameFile" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="ReNameFile.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet version="1" class="System.Security.NamedPermissionSet" Name="LocalIntranet" Description="Default rights given to applications on the local intranet" Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!-- UAC 清单选项
+            如果要更改 Windows 用户帐户控制级别，请用以下节点之一替换 
+            requestedExecutionLevel 节点。
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+            指定 requestedExecutionLevel 节点将会禁用文件和注册表虚拟化。
+            如果要利用文件和注册表虚拟化实现向后 
+            兼容性，则删除 requestedExecutionLevel 节点。
+        -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ReNameFile.exe" size="10240">
+      <assemblyIdentity name="ReNameFile" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>eYWIruwq9+QkJzCsB/k7KfwKuQAlyNHegIf8lcjNOpA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="ReNameFile.exe.config" size="187">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>xm4bo26HQ0LNVwz1vdPYtzhkpMnp2AI5i+f0b+OahTI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- 此应用程序设计使用的所有 Windows 版本的列表。
+      Windows 将会自动选择最兼容的环境。-->
+      <!-- 如果应用程序设计为使用 Windows Vista，请取消注释以下 supportedOS 节点-->
+      <!--<supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"></supportedOS>-->
+      <!-- 如果应用程序设计使用 Windows 7，请取消注释以下 supportedOS 节点-->
+      <!--<supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>-->
+      <!-- 如果应用程序设计为使用 Windows 8，请取消注释以下 supportedOS 节点-->
+      <!--<supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"></supportedOS>-->
+    </application>
+  </compatibility>
+<publisherIdentity name="CN=USER-8E6VJMRK9Q\Administrator" issuerKeyHash="fb11b21037f0b8e53f5012bc5c68e3a13ecc289d" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>9x60LAsO2O7JBLYB5C8Wr5S+0Uj9tnXuqnzqf9xfSNo=</DigestValue></Reference></SignedInfo><SignatureValue>Ue8bkEQ9ZWiB3RBxHGE7ZNH9lTkbEjdnGZZ72dekSfsXL3jdhF5iFlGnq2JlFVnRMI+xFWK7z/5pBcsdiQgOzl8K1kAavTYV/JgslJNKFvK0nsYrDfCD+pX1BC72muHuwid55u7hCcCa0Veq068lBDWRQNeGqtfivmYaGIraC0s=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>vwr1Tk0DiRAPAzuW3FUot2/ENxKD8H9LJS3Gqi3HI6WfceQTcX/4y0/o49+twvoRZDx8HjOQTWo8ebjjeBdrRmdudiXqXQMpbYwzI1u/qIMkAoj2+Rb3WYYoBnWFTCWBn6WaOJ9R8CFmDWN5Rbt7aE0WDr5kaRtY6UPwKyBHepE=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="da485fdc7fea7caaee75b6fd48d1be94af162fe401b604c9eed80e0b2cb41ef7" Description="" Url=""><as:assemblyIdentity name="ReNameFile.exe" version="1.0.0.0" publicKeyToken="e9b0299972d1c46c" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=USER-8E6VJMRK9Q\Administrator</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>tkHjwbLyyAxnOl/CsfeMtL0eiXar3tWwQPxqmhpxKwc=</DigestValue></Reference></SignedInfo><SignatureValue>qGLeXTZzduyn7lvx3klhPXgw63wxWc17IUicznfnzNKpusJi5N76IYzStaZeQbLnJZiy9RlbGZBBgJlBCnUvBXBA+BtOm2ND0BV1ha0DUNwIKwItGKnn+0lI+05B/IWFlfEQ0L32tXbAqF7ZPpsAGXptpLlctbPFkHa6yN35OQ8=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>vwr1Tk0DiRAPAzuW3FUot2/ENxKD8H9LJS3Gqi3HI6WfceQTcX/4y0/o49+twvoRZDx8HjOQTWo8ebjjeBdrRmdudiXqXQMpbYwzI1u/qIMkAoj2+Rb3WYYoBnWFTCWBn6WaOJ9R8CFmDWN5Rbt7aE0WDr5kaRtY6UPwKyBHepE=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIICDTCCAXagAwIBAgIQdFfHAbQGa7NMI4UO/WvTFjANBgkqhkiG9w0BAQsFADBFMUMwQQYDVQQDHjoAVQBTAEUAUgAtADgARQA2AFYASgBNAFIASwA5AFEAXABBAGQAbQBpAG4AaQBzAHQAcgBhAHQAbwByMB4XDTE0MTEwOTExNDE0OFoXDTE1MTEwOTE3NDE0OFowRTFDMEEGA1UEAx46AFUAUwBFAFIALQA4AEUANgBWAEoATQBSAEsAOQBRAFwAQQBkAG0AaQBuAGkAcwB0AHIAYQB0AG8AcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAvwr1Tk0DiRAPAzuW3FUot2/ENxKD8H9LJS3Gqi3HI6WfceQTcX/4y0/o49+twvoRZDx8HjOQTWo8ebjjeBdrRmdudiXqXQMpbYwzI1u/qIMkAoj2+Rb3WYYoBnWFTCWBn6WaOJ9R8CFmDWN5Rbt7aE0WDr5kaRtY6UPwKyBHepECAwEAATANBgkqhkiG9w0BAQsFAAOBgQAu9DOdD0w66umB7pr1qPuaGh9MjO0HhBxyfScWBhM7r0gmBJ8ccyoNtYdm/suLGeE1gSb2dLjPv9LXun8hi5X9gXWaXBVjzkrtuPWCrmtkElc57VZFju4PPlNGtBrHQbjOYcnubePEhtM5i93jitkN6UZQVHc4x/N2g25w4GIG4Q==</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

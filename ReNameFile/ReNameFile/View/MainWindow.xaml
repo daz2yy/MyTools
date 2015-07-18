@@ -1,0 +1,38 @@
+﻿<Window x:Class="ReNameFile.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <TextBlock Margin="47,24,408,263" VerticalAlignment="Center">
+            Address:
+        </TextBlock>
+        <TextBlock Margin="47,78,408,216" VerticalAlignment="Center" Height="26">
+            Form:
+        </TextBlock>
+        <TextBlock Margin="47,132,408,163" VerticalAlignment="Center" Height="25"><Run Language="zh-cn" Text="Replace:"/></TextBlock>
+        <TextBox
+            Name="Address"
+            TextWrapping="Wrap"
+            AcceptsReturn="True"
+            VerticalScrollBarVisibility="Visible" Margin="114,24,26,263"
+        />
+        <TextBox
+        	x:Name="From"
+        	TextWrapping="Wrap"
+        	AcceptsReturn="True"
+        	VerticalScrollBarVisibility="Visible" Margin="114,71,26,216"
+        />
+        <TextBox
+        	x:Name="To"
+        	TextWrapping="Wrap"
+        	AcceptsReturn="True"
+        	VerticalScrollBarVisibility="Visible" Margin="114,124,26,163"
+        />
+        <Button 
+            Margin="127,227,273,60"
+            Click="ReplaceFile" Content ="ReplaceFile"/>
+        <Button 
+        	Margin="321,227,79,60"
+        	Click="ReplaceFolder" Content="ReplaceFolder"/>
+    </Grid>
+</Window>
