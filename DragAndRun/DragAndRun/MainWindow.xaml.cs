@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,27 +35,56 @@ namespace DragAndRun
                 System.Array array = ((System.Array)e.Data.GetData(DataFormats.FileDrop));
                 msg = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
             }
-            if (msg.Contains(".lua"))
+            string fileExt = System.IO.Path.GetExtension(msg);
+            string inputPath = fileExt == "" ? msg : System.IO.Path.GetDirectoryName(msg);
+            if (fileExt == "lua")
             {
                 msg = "This is a lua file:" + msg;
             }
-            else if (msg.Contains(".png") || msg.Contains(".jpg"))
+            else if (fileExt == "png" || fileExt == ".jpg")
             {
                 msg = "This is a image file:" + msg;
             }
 
-            //Process myProcess = new Process();
-            //string fileName = @"D:\PngEncode.exe";
-            //string para = @"-i " + msg + @" -o " + msg;
-            //ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(fileName, para);
-            //myProcess.StartInfo = myProcessStartInfo;
-            //myProcess.Start();
-            //while (!myProcess.HasExited)
-            //{
-            //   myProcess.WaitForExit();
-            //}
+            if (this.encodeALLBtn.IsChecked == true)
+            {
+                
+            }
+            else if (this.encodeLuaBtn.IsChecked == true)
+            {
 
-            MessageBox.Show("finish encodeing");
+            }
+
+            string outputPath = System.IO.Path.GetDirectoryName(msg);
+            string path = this.inputText.ToString();
+            if (path != "")
+            {
+                outputPath = path;
+                if (!System.IO.Directory.Exists(path))
+                {
+                    try
+                    {
+                        System.IO.Directory.CreateDirectory(path);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("创建文件夹失败, 请检查文件夹路径是否正确.");
+                        return;
+                    }
+                }
+            }
+            Process myProcess = new Process();
+            string fileName = @"D:\NeedToCleanUp\test.bat";
+            string para = @"-i " + msg + @" -o " + msg;
+            ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(fileName, para);
+            myProcess.StartInfo = myProcessStartInfo;
+            myProcess.Start();
+            while (!myProcess.HasExited)
+            {
+                myProcess.WaitForExit();
+            }
+
+            MessageBox.Show("finish");
         }
     }
 }

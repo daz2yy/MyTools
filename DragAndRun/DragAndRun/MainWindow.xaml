@@ -3,9 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="DragAndRun" Height="350" Width="525">
     <Grid>
-        <RadioButton IsChecked="True">加密图片和lua文件</RadioButton>
+        <RadioButton Name="encodeALLBtn" IsChecked="True" Margin="0,0,394.4,298.4">加密图片和lua文件</RadioButton>
+        <RadioButton Name="encodeLuaBtn" Margin="129,0,296.4,298.4">加密lua文件</RadioButton>
+        <RadioButton Name="encodeImageBtn" Margin="222,0,210.4,298.4">加密图片</RadioButton>
         <TextBlock Margin="0,24,344.4,268.4">输出路径(不填默认覆盖源文件):</TextBlock>
-        <TextBox Margin="179,24,0.4,272.4"></TextBox>
+        <TextBox Name="inputText" Margin="179,24,0.4,272.4"></TextBox>
         <ListBox AllowDrop="True" Drop="ListBox_Drag" Margin="0,72,0.4,0.4">
             拖动文件夹到这里:
         </ListBox>
