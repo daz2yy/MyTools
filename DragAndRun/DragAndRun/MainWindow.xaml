@@ -9,9 +9,9 @@
         <RadioButton Name="encodeLuaBtn" GroupName="1" Margin="154,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">加密lua文件</RadioButton>
         <RadioButton Name="encodeImageBtn" GroupName="1" Margin="274,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">加密图片</RadioButton>
         <TextBlock Margin="0,45,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">输出路径(不填默认覆盖源文件):</TextBlock>
-        <TextBox Name="outputPath" Margin="179,42,0,0"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="365"></TextBox>
+        <TextBox Name="outputPath" Margin="179,42,0,0" VerticalAlignment="Top"></TextBox>
         <TextBlock Margin="0,71,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">加密文件脚本(不填默认加密文件):</TextBlock>
-        <TextBox Name="encodeFilePath" Margin="179,68,0,0"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="365"></TextBox>
+        <TextBox Name="encodeFilePath" Margin="179,68,0,0" VerticalAlignment="Top"></TextBox>
         <ListBox AllowDrop="True" Drop="ListBox_Drag" Margin="0,106,0,0">
             拖动文件夹到这里:
         </ListBox>
