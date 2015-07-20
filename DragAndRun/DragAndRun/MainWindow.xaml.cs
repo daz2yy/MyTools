@@ -56,7 +56,7 @@ namespace DragAndRun
             }
 
             string outputPath = System.IO.Path.GetDirectoryName(msg);
-            string path = this.inputText.ToString();
+            string path = this.outputPath.ToString();
             if (path != "")
             {
                 outputPath = path;
