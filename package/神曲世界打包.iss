@@ -7,12 +7,13 @@
 ; (若要生成一个新的 GUID，请选择“工具 | 生成 GUID”。)
 AppId={{F43D986F-DABC-424F-922D-2A1081AED33C}
 AppName=神曲世界打包
-AppVerName=神曲世界打包 1.0.0
+AppVerName=神曲世界打包 1.1.0
 AppPublisher=Daz2yy
 DefaultDirName={pf}\神曲世界打包
 DefaultGroupName=神曲世界打包
-OutputBaseFilename=神曲世界打包v1.0.0
+OutputBaseFilename=神曲世界打包v1.1.0
 SetupIconFile=E:\MyTools\DragAndRun\DragAndRun\bin\Release\icon.ico
+OutputDir=H:\发布\神曲世界打包
 Compression=lzma
 SolidCompression=yes
 
