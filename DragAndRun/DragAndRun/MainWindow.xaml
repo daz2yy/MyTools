@@ -88,11 +88,14 @@
                     <TextBlock Margin="0,71,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">加密文件脚本(不填默认加密文件):</TextBlock>
                     <TextBox Name="comEncodeFilePath" Margin="178,68,1,0" VerticalAlignment="Top"></TextBox>
                     <TextBox Name="comContentText" AllowDrop="True" Drop="ListBox_Drag" 
-                             ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                             ScrollViewer.VerticalScrollBarVisibility="Visible" 
                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
                              IsReadOnly="True" Margin="0,136,0,0">
                             拖动需要加密的文件夹, 或者是文件所在的文件夹到这里:
                     </TextBox>
+                    <Grid Panel.ZIndex="100" AllowDrop="True" Drop="ListBox_Drag" Background="Gray" Opacity="0.1" Margin="0,136,18,236">
+                        <Label FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center">拖放区</Label>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Name="comPackSub">
@@ -159,10 +162,11 @@
                     <TextBlock Margin="10,63,0,239" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="206" Grid.Column="1">版本号(字符串比较时,必须比之前的大):</TextBlock>
                     <TextBox Name="comVersionPath" Margin="41,63,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22"/>
 
+
                     <Button Name="comOpenResourcePath" Margin="0,85,508,513" Grid.Row="1" Grid.Column="2" Click="OpenBtn_Click">
                         open
                     </Button>
-                    <TextBlock Margin="10,85,0,217" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="207" Grid.Column="1">生成MD5的资源路径(是未加密的资源):</TextBlock>
+                    <TextBlock Margin="10,85,0,217" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="207" Grid.Column="1">资源路径(是未加密的资源):</TextBlock>
                     <TextBox Name="comResourcePath" Margin="41,85,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22"/>
 
                     <Button Name="comOpenOutPath" Margin="0,107,508,491" Grid.Row="1" Grid.Column="2" Click="OpenBtn_Click">

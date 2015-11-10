@@ -80,6 +80,16 @@ namespace DragAndRun
             this.comConfigList.SelectedIndex = 0;
         }
 
+        private void cleanData()
+        {
+            this.comUseSVN.IsChecked = SaveData.GetInstance().getData("szUseSVN") == "True";
+            this.comSVNPath.Text = "";
+            this.comBeginVersion.Text = "";
+            this.comEndVersion.Text = "";
+            this.subEncodIOSBtn.IsChecked = SaveData.GetInstance().getData("szEncodeType") == "True";
+            this.subEncodAndroidBtn.IsChecked = !this.subEncodIOSBtn.IsChecked;
+        }
+
         private void saveData()
         {
             SaveData.GetInstance().setData("szResourcePath", this.comResourcePath.Text);
@@ -115,6 +125,7 @@ namespace DragAndRun
             this.comBeginVersion.Text = SaveData.GetInstance().getData("szBeginVersion");
             this.comEndVersion.Text = SaveData.GetInstance().getData("szEndVersion");
             this.subEncodIOSBtn.IsChecked = SaveData.GetInstance().getData("szEncodeType") == "True";
+            this.subEncodAndroidBtn.IsChecked = !this.subEncodIOSBtn.IsChecked;
             oldOutPutPath = this.comOutPath.Text;
             _ListViewItems = new List<Config>();
             for (int i = 0; i < _configFiles.Count; i++)
@@ -182,7 +193,7 @@ namespace DragAndRun
         public void encodeLua(string inputPath, string outputPath)
         {
             this.updateDescription("加密Lua: ");
-            if (System.IO.Directory.Exists(inputPath))
+            if (System.IO.Directory.Exists(inputPath) || (System.IO.File.Exists(inputPath) && System.IO.Path.GetExtension(inputPath) == ".lua"))
             {
                 string executeFilePath;
                 string param;
@@ -228,7 +239,7 @@ namespace DragAndRun
             }
             else
             {
-                this.updateDescription("加密Lua路径不存在!");
+                this.updateDescription("加密Lua路径或文件不存在!");
             }
         }
 
@@ -236,7 +247,7 @@ namespace DragAndRun
         public void encodeImage(string inputPath, string outputPath)
         {
             this.updateDescription("加密图片: ");
-            if (System.IO.Directory.Exists(inputPath))
+            if (System.IO.Directory.Exists(inputPath) || System.IO.File.Exists(inputPath))
             {
                 string executeFilePath;
                 string param;
@@ -248,7 +259,7 @@ namespace DragAndRun
             }
             else
             {
-                this.updateDescription("加密图片路径不存在!");
+                this.updateDescription("加密图片路径或文件不存在!");
             }
         }
 
@@ -261,7 +272,7 @@ namespace DragAndRun
             //filePath = "C:\\Program Files (x86)\\神曲世界打包\\encodeTools\\luaToJit\\compile_scripts.bat";
             this.updateDescription("执行文件: " + filePath);
             this.updateDescription("执行参数: " + param);
-            this.updateDescription("输出: " + param);
+            this.updateDescription("输出:");
             Process myProcess = new Process();
             ProcessStartInfo myProcessStartInfo = new ProcessStartInfo("\"" + filePath + "\"", param);
             myProcess.StartInfo = myProcessStartInfo;
@@ -286,7 +297,7 @@ namespace DragAndRun
                 MessageBox.Show("还有信息没填完整!");
                 return;
             }
-            if (this.comUseSVN.IsChecked == true && (this.comBeginVersion.Text == "" || this.comEndVersion.Text == ""))
+            if (this.comUseSVN.IsChecked == true && (this.comBeginVersion.Text == "" || this.comEndVersion.Text == "" || this.comSVNPath.Text == ""))
             {
                 MessageBox.Show("还有信息没填完整!");
                 return;   

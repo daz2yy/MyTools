@@ -10,13 +10,13 @@
             作者: 庄晓达
         </Label>
         <Label Name="buildDate" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="Auto" Margin="0,80,0,0">
-            版本号: 1.0.0
+            版本号: 1.2.0
         </Label>
         <Label Name="author" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="Auto" Margin="0,110,0,0">
             日期: 2015-10-01
         </Label>
         <Label Name="contact" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="Auto" Margin="0,140,0,0">
-            qq: 527248618
+            微信: daz2yy
         </Label>
         <Button Name="OK" Margin="78,210,77,24" Click="OK_Click" >
             OK
