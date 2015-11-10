@@ -21,76 +21,76 @@ namespace DragAndRun.FileFilter
         public CFileFilter()
         {
         }
-        private string szVersion = "";
-        private string szResourcePath = "";
-        private string szOutputPath = "";
-        private string szHistoryPath = "";
-        private string szHistoryOutPath = "";
-        private string szDifferentOutPath = "";
-        private string szResourceOutPath = "";
-        private string szUploadZipOutPath = "";
-        private string[] szFilter;
-        private MainWindow window;
-        private string nBeginVersion;
-        private string nEndVersion;
-        private string szSVNPath;
-        private bool bUseSVN;
-        public void setVersion(string version)
+        public string szVersion
         {
-            szVersion = version;
+            get;
+            set;
         }
-
-        public void setResourcePath(string path)
+        public string szResourcePath
         {
-            szResourcePath = path;
+            get;
+            set;
         }
-
-        public void setOutPutPath(string path)
+        public string szOutputPath
         {
-            szOutputPath = path;
+            get;
+            set;
         }
-
-        public void setHistoryPath(string path)
+        public string szHistoryPath
         {
-            szHistoryPath = path;
+            get;
+            set;
         }
-
-        public void setOutHistoryPath(string path)
+        public string szHistoryOutPath
         {
-            szHistoryOutPath = path;
+            get;
+            set;
         }
-
-        public void setOutDifferentPath(string path)
+        public string szDifferentOutPath
         {
-            szDifferentOutPath = path;
+            get;
+            set;
         }
-
-        public void setOutResourcePath(string path)
+        public string szResourceOutPath
         {
-            szResourceOutPath = path;
+            get;
+            set;
         }
-
-        public void setOutUploadZipPath(string path)
+        public string szUploadZipOutPath
         {
-            szUploadZipOutPath = path;
+            get;
+            set;
         }
-
-        public void setUseSVN(bool bUse, string nBeginVer, string nEndVer, string szSVN)
+        public MainWindow window
         {
-            bUseSVN = bUse;
-            nBeginVersion = nBeginVer;
-            nEndVersion = nEndVer;
-            szSVNPath = szSVN;
+            get;
+            set;
         }
+        public string nBeginVersion
+        {
+            get;
+            set;
+        }
+        public string nEndVersion
+        {
+            get;
+            set;
+        }
+        public string szSVNPath
+        {
+            get;
+            set;
+        }
+        public bool bUseSVN
+        {
+            get;
+            set;
+        }
+        public string[] szFilter;
 
         public void setFileFilter(string str)
         {
             szFilter = str.Split(new char[1]{';'});
-        }
-
-        public void setWindowHandler(MainWindow win)
-        {
-            window = win;
         }
 
         public void genCurVersionXML()
@@ -342,28 +342,36 @@ namespace DragAndRun.FileFilter
                 System.IO.Directory.CreateDirectory(szDifferentOutPath);
             }
             window.updateDescription("\n开始压缩文件:");
-            //add to zip
-            string executeFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-            executeFilePath = System.IO.Path.GetDirectoryName(executeFilePath);
-            executeFilePath = executeFilePath + @"\WinRAR";
-            string outFileFullName = string.Format(@"{0}\{1}-{2}.zip", szDifferentOutPath, szLastVersion, szVersion);
-            Process p = new Process();
-            p.StartInfo.FileName = executeFilePath;
-            p.StartInfo.Arguments = string.Format(@"m -r -afzip -ed -m3 -ep1 {0} {1}", outFileFullName, szResourceOutPath + @"\*");
-            p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.RedirectStandardInput = true;
-            p.StartInfo.RedirectStandardError = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.ErrorDialog = false;
-            p.Start();
-            while (!p.HasExited)
+            string outFileFullName = "";
+            if (System.IO.Directory.Exists(szResourceOutPath))
             {
-                p.WaitForExit();
+                //add to zip
+                string executeFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                executeFilePath = System.IO.Path.GetDirectoryName(executeFilePath);
+                executeFilePath = executeFilePath + @"\WinRAR";
+                outFileFullName = string.Format(@"{0}\{1}-{2}.zip", szDifferentOutPath, szLastVersion, szVersion);
+                Process p = new Process();
+                p.StartInfo.FileName = executeFilePath;
+                p.StartInfo.Arguments = string.Format(@"m -r -afzip -ed -m3 -ep1 {0} {1}", outFileFullName, szResourceOutPath + @"\*");
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.RedirectStandardError = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.ErrorDialog = false;
+                p.Start();
+                while (!p.HasExited)
+                {
+                    p.WaitForExit();
+                }
+                p.Close();
+                p.Dispose();
+                System.IO.Directory.Delete(szResourceOutPath, true);
             }
-            p.Close();
-            p.Dispose();
-            System.IO.Directory.Delete(szResourceOutPath, true);
+            else
+            {
+                window.updateDescription("\n没有文件.:");
+            }
             window.updateDescription("\n压缩文件完成:" + outFileFullName);
         }
 
@@ -418,47 +426,41 @@ namespace DragAndRun.FileFilter
 
         //================================================ use svn ================================================
         //获取最大的版本号, 保存在szLastVersion
-        private bool getLastVersion()
+        public bool getLastVersion()
         {
-            string outputPath = szDifferentOutPath;
-            if (Directory.Exists(outputPath) == false)
+            if (System.IO.File.Exists(szOutputPath + @"\versions"))
             {
-                Directory.CreateDirectory(outputPath);
-            }
-
-            window.updateDescription("\n和以前的版本对比,生成差异文件:");
-            if (Directory.Exists(szHistoryPath) == false)
-            {
-                Directory.CreateDirectory(szHistoryPath);
-            }
-            DirectoryInfo TheFolder = new DirectoryInfo(szHistoryPath);
-            FileInfo NextFile = null;
-            List<string> oldFileList = new List<string>();
-            List<string> oldMD5List = new List<string>();
-            XmlDocument oldDoc = null;
-            szLastVersion = "";
-            foreach (FileInfo File in TheFolder.GetFiles())
-            {
-                XmlDocument tempDoc = new XmlDocument();
-                tempDoc.Load(File.FullName);
-                XmlElement oldRoot = tempDoc.DocumentElement;
-                string oldVersion = oldRoot.GetAttribute("version");
-                if (szLastVersion.CompareTo(oldVersion) < 0 && oldVersion != szVersion)
+                StreamReader sr = new StreamReader(szOutputPath + @"\versions");
+                while (sr.Peek() > 0)
                 {
-                    szLastVersion = oldVersion;
-                    NextFile = new FileInfo(File.FullName);
-                    oldDoc = tempDoc;
+                    string line = sr.ReadLine();
+                    int begin = line.IndexOf(":");
+                    int end = line.IndexOf(",");
+                    if (end == -1)
+                    {
+                        end = line.IndexOf(";");
+                    }
+                    string version = line.Substring(begin+1, end-begin-1);
+                    if (version.CompareTo(szLastVersion) > 0 && version.CompareTo(szVersion) < 0)
+                        szLastVersion = version;
                 }
+                sr.Close();
             }
-            if (NextFile == null)
+            else
             {
-                return false;
+                FileStream file = System.IO.File.Create(szOutputPath + @"\versions");
+                file.Close();
             }
-            return true;
+            return szLastVersion != "";
         }
 
         public void getSVNDifferFiles()
         {
+            //获取最大的版本号
+            if (this.getLastVersion() == false)
+            {
+                return;
+            }
             // diff xml
             XmlDocument newDoc = new XmlDocument();
             XmlDeclaration xmldecl = newDoc.CreateXmlDeclaration("1.0", "UTF-8", null);
@@ -480,10 +482,19 @@ namespace DragAndRun.FileFilter
                 }
 
                 string fullFileName = szResourceOutPath + "\\" + item.Path;
+                if (item.NodeKind == SvnNodeKind.Directory)
+                {
+                    if (Directory.Exists(fullFileName) == false)
+                    {
+                        DirectoryInfo info = Directory.CreateDirectory(fullFileName);
+                    }
+                    continue;
+                }
+
                 string outPath = Path.GetDirectoryName(fullFileName);
                 if (Directory.Exists(outPath) == false)
                 {
-                    Directory.CreateDirectory(outPath);
+                    DirectoryInfo info = Directory.CreateDirectory(outPath);
                 }
                 try
                 {
@@ -499,7 +510,7 @@ namespace DragAndRun.FileFilter
                     }
                     else
                     {
-                        this.createXmlNode(newDoc, newRoot, item.Path, this.createFileMD5(fullFileName, out size), "0");
+                        this.createXmlNode(newDoc, newRoot, item.Path, "this is a delete file.", "0");
                     }
                 }
                 catch (Exception ee)
@@ -514,11 +525,6 @@ namespace DragAndRun.FileFilter
             if (Directory.Exists(szDifferentOutPath) == false)
             {
                 Directory.CreateDirectory(szDifferentOutPath);
-            }
-            //获取最大的版本号
-            if (this.getLastVersion() == false)
-            {
-                return;
             }
             newDoc.Save(szDifferentOutPath + @"\" + szLastVersion + "-" + szVersion + ".xml");
         }

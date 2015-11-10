@@ -31,10 +31,9 @@ namespace DragAndRun
         public MainWindow()
         {
             InitializeComponent();
-            FtpHelper ftp = new FtpHelper("120.131.1.236", "root", "#1MzjpMr]63w");
-            ftp.UpLoad("");
+            //FtpHelper ftp = new FtpHelper("120.131.1.236", "root", "#1MzjpMr]63w");
+            //ftp.UpLoad("");
             //ftp.webUpload();
-            return;
         }
 
         public enum PackType
@@ -183,46 +182,53 @@ namespace DragAndRun
         public void encodeLua(string inputPath, string outputPath)
         {
             this.updateDescription("加密Lua: ");
-            string executeFilePath;
-            string param;
-            if ((this.comPackAll.IsSelected == true && this.encodAndroidBtn.IsChecked == true) ||
-                (this.comPackSub.IsSelected == true && this.subEncodAndroidBtn.IsChecked == true))
+            if (System.IO.Directory.Exists(inputPath))
             {
-                bool bMoveFile = false;
-                string oldPath = "";
-                if (System.IO.Path.GetExtension(inputPath) != "")
+                string executeFilePath;
+                string param;
+                if ((this.comPackAll.IsSelected == true && this.encodAndroidBtn.IsChecked == true) ||
+                    (this.comPackSub.IsSelected == true && this.subEncodAndroidBtn.IsChecked == true))
                 {
-                    if (!System.IO.Directory.Exists(inputPath + "_temp"))
+                    bool bMoveFile = false;
+                    string oldPath = "";
+                    if (System.IO.Path.GetExtension(inputPath) != "")
                     {
-                        System.IO.Directory.CreateDirectory(inputPath + "_temp");
+                        if (!System.IO.Directory.Exists(inputPath + "_temp"))
+                        {
+                            System.IO.Directory.CreateDirectory(inputPath + "_temp");
+                        }
+                        else
+                        {
+                            System.IO.Directory.Delete(inputPath + "_temp", true);
+                            System.IO.Directory.CreateDirectory(inputPath + "_temp");
+                        }
+                        System.IO.File.Move(inputPath, inputPath + @"_temp\" + System.IO.Path.GetFileName(inputPath));
+                        oldPath = inputPath;
+                        inputPath = inputPath + "_temp";
+                        bMoveFile = true;
                     }
-                    else
+                    executeFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                    executeFilePath = System.IO.Path.GetDirectoryName(executeFilePath);
+                    executeFilePath = executeFilePath + @"\encodeTools\luaToJit\compile_scripts.bat";
+                    param = "-i \"" + inputPath + "\" -o \"" + outputPath + "\" -m files -jit";
+                    executeFile(executeFilePath, param);
+                    if (bMoveFile)
                     {
-                        System.IO.Directory.Delete(inputPath + "_temp", true);
-                        System.IO.Directory.CreateDirectory(inputPath + "_temp");
+                        System.IO.Directory.Delete(oldPath + "_temp", true);
                     }
-                    System.IO.File.Move(inputPath, inputPath + @"_temp\" + System.IO.Path.GetFileName(inputPath));
-                    oldPath = inputPath;
-                    inputPath = inputPath + "_temp";
-                    bMoveFile = true;
                 }
-                executeFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-                executeFilePath = System.IO.Path.GetDirectoryName(executeFilePath);
-                executeFilePath = executeFilePath + @"\encodeTools\luaToJit\compile_scripts.bat";
-                param = "-i \"" + inputPath + "\" -o \"" + outputPath + "\" -m files -jit";
-                executeFile(executeFilePath, param);
-                if (bMoveFile)
+                else
                 {
-                    System.IO.Directory.Delete(oldPath + "_temp", true);
+                    executeFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                    executeFilePath = System.IO.Path.GetDirectoryName(executeFilePath);
+                    executeFilePath = executeFilePath + @"\encodeTools\LuaEncode.exe";
+                    param = "-i \"" + inputPath + "\" -o \"" + outputPath;
+                    executeFile(executeFilePath, param);
                 }
             }
             else
             {
-                executeFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-                executeFilePath = System.IO.Path.GetDirectoryName(executeFilePath);
-                executeFilePath = executeFilePath + @"\encodeTools\LuaEncode.exe";
-                param = "-i \"" + inputPath + "\" -o \"" + outputPath;
-                executeFile(executeFilePath, param);
+                this.updateDescription("加密Lua路径不存在!");
             }
         }
 
@@ -230,13 +236,20 @@ namespace DragAndRun
         public void encodeImage(string inputPath, string outputPath)
         {
             this.updateDescription("加密图片: ");
-            string executeFilePath;
-            string param;
-            executeFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-            executeFilePath = System.IO.Path.GetDirectoryName(executeFilePath);
-            executeFilePath = executeFilePath + @"\encodeTools\PngEncode.exe";
-            param = "-i " + "\"" + inputPath + "\"" + " -o " + "\"" + outputPath + "\"";
-            executeFile(executeFilePath, param);
+            if (System.IO.Directory.Exists(inputPath))
+            {
+                string executeFilePath;
+                string param;
+                executeFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                executeFilePath = System.IO.Path.GetDirectoryName(executeFilePath);
+                executeFilePath = executeFilePath + @"\encodeTools\PngEncode.exe";
+                param = "-i " + "\"" + inputPath + "\"" + " -o " + "\"" + outputPath + "\"";
+                executeFile(executeFilePath, param);
+            }
+            else
+            {
+                this.updateDescription("加密图片路径不存在!");
+            }
         }
 
         void executeFile(string filePath, string param)
@@ -279,17 +292,20 @@ namespace DragAndRun
                 return;   
             }
             this.Description.Text = "";
-            _Filter.setVersion(this.comVersionPath.Text);
-            _Filter.setResourcePath(this.comResourcePath.Text);
-            _Filter.setOutPutPath(this.comOutPath.Text);
-            _Filter.setHistoryPath(this.comHistoryPath.Text);
-            _Filter.setOutHistoryPath(this.comHistoryOutPath.Text);
-            _Filter.setOutDifferentPath(this.comDifferentOutPath.Text);
-            _Filter.setOutResourcePath(this.comResourceOutPath.Text);
-            _Filter.setOutUploadZipPath(this.comOutZipPath.Text);
+            _Filter.szVersion = this.comVersionPath.Text;
+            _Filter.szResourcePath = this.comResourcePath.Text;
+            _Filter.szOutputPath = this.comOutPath.Text;
+            _Filter.szHistoryPath = this.comHistoryPath.Text;
+            _Filter.szHistoryOutPath = this.comHistoryOutPath.Text;
+            _Filter.szDifferentOutPath = this.comDifferentOutPath.Text;
+            _Filter.szResourceOutPath = this.comResourceOutPath.Text;
+            _Filter.szUploadZipOutPath = this.comOutZipPath.Text;
             _Filter.setFileFilter(this.comFilter.Text);
-            _Filter.setWindowHandler(this);
-            _Filter.setUseSVN(this.comUseSVN.IsChecked == true, this.comBeginVersion.Text, this.comEndVersion.Text, this.comSVNPath.Text);
+            _Filter.window = this;
+            _Filter.bUseSVN = this.comUseSVN.IsChecked == true;
+            _Filter.nBeginVersion = this.comBeginVersion.Text;
+            _Filter.nEndVersion = this.comEndVersion.Text;
+            _Filter.szSVNPath = this.comSVNPath.Text;
 
             //save data
             this.saveData();
