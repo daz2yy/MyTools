@@ -1,0 +1,3 @@
+call make_E_MEFramework_package.bat
+call make_E_APP_package.bat
+pause

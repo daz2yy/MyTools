@@ -83,11 +83,13 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharpSvn">
-      <HintPath>bin\Release\SharpSvn\SharpSvn.dll</HintPath>
+    <Reference Include="SharpSvn, Version=1.8009.3299.43, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Tools\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
-    <Reference Include="SharpSvn.UI">
-      <HintPath>bin\Release\SharpSvn\SharpSvn.UI.dll</HintPath>
+    <Reference Include="SharpSvn.UI, Version=1.8009.3299.43, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Tools\SharpSvn\SharpSvn.UI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
