@@ -83,6 +83,13 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DiffieHellman">
+      <HintPath>Tools\SharpSSH-1.1.1.13.bin\DiffieHellman.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="Org.Mentalis.Security">
+      <HintPath>Tools\SharpSSH-1.1.1.13.bin\Org.Mentalis.Security.dll</HintPath>
+    </Reference>
     <Reference Include="SharpSvn, Version=1.8009.3299.43, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Tools\SharpSvn\SharpSvn.dll</HintPath>
@@ -101,34 +108,41 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Tamir.SharpSSH">
+      <HintPath>Tools\SharpSSH-1.1.1.13.bin\Tamir.SharpSSH.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="View\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="About.xaml.cs">
+    <Compile Include="Module\GenerateUpdatePackage.cs" />
+    <Compile Include="View\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\FileEncode.cs" />
     <Compile Include="Utils\SaveData.cs" />
     <Compile Include="Utils\FtpHelper.cs" />
-    <Page Include="About.xaml">
+    <Compile Include="ViewModule\GlobalVM.cs" />
+    <Compile Include="ViewModule\PackageAllVM.cs" />
+    <Compile Include="ViewModule\PackageSubVM.cs" />
+    <Page Include="View\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
+    <Compile Include="View\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Utils\FileFilter.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

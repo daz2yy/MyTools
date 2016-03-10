@@ -1,68 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-
-//MD5
-using System.Security.Cryptography;
-//XML
-using System.Xml;
-using System.Windows;
-using System.Diagnostics;
-//svn
-using SharpSvn;
-using DragAndRun.Utils;
+﻿using DragAndRun.Utils;
 using DragAndRun.ViewModule;
+using SharpSvn;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Xml;
 
-namespace DragAndRun.FileFilter
+namespace DragAndRun.Module
 {
-    public class CFileFilter
+    class GenerateUpdatePackage
     {
-        public CFileFilter()
-        {
-        }
-        public string szDifferentOutPath;
-        public string szResourceOutPath;
-        public string szUploadZipOutPath;
-        private string szLastVersion = "";
+        public string szLastVersion = "";
 
-        private void init()
+        public void doGenerate()
+        {
+            if (PackageSubVM.Instance.BeginVersion == "" || PackageSubVM.Instance.EndVersion == "" || PackageSubVM.Instance.SVNPath == "")
+            {
+                MessageBox.Show("SVN信息没填完整!");
+                return;
+            }
+            MainWindow window = (MainWindow)Application.Current.MainWindow;
+            if (!window.checkProjectSelect())
+            {
+                MessageBox.Show("请选着需要打包的项目");
+                return;
+            }
+            PackageSubVM.Instance.Description = "======================= 开始打热更包 =============================";
+            //save data
+            PackageSubVM.Instance.saveData();
+            //new run
+            Thread executeThread = new Thread(new ThreadStart(this.testAsync));
+            executeThread.Start();
+        }
+
+        public void testAsync()
+        {
+            PackageSubVM.Instance.LoadingPanel = System.Windows.Visibility.Visible;
+            PackageSubVM.Instance.szLastVersion = this.beginPackage();
+            string preStr = "Android分包";
+            if (!PackageSubVM.Instance.PackageAndroid)
+            {
+                preStr = "IOS分包";
+            }
+            MessageBox.Show(preStr + "打包完成.");
+            PackageSubVM.Instance.LoadingPanel = System.Windows.Visibility.Hidden;
+        }
+
+        public string beginPackage()
         {
             szLastVersion = "";
-            szDifferentOutPath = PackageSubVM.Instance.OutPath + @"\edition";
-            if (!System.IO.Directory.Exists(szDifferentOutPath))
-            {
-                try
-                {
-                    System.IO.Directory.CreateDirectory(szDifferentOutPath);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return;
-                }
-            }
-            szResourceOutPath = PackageSubVM.Instance.OutPath + @"\source";
-            if (!System.IO.Directory.Exists(szResourceOutPath))
-            {
-                try
-                {
-                    System.IO.Directory.CreateDirectory(szResourceOutPath);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return;
-                }
-            }
-        }
-
-        public void genCurVersionXML()
-        {
-            init();
-
             // get update file
             XmlDocument editionXML = this.getSVNDifferFiles();
             // encode
@@ -70,11 +63,12 @@ namespace DragAndRun.FileFilter
             // add to zip
             this.zipOutPutResource();
             // save update file name
-            editionXML.Save(szDifferentOutPath + @"\" + szLastVersion + "-" + PackageSubVM.Instance.Version + ".xml");
+            editionXML.Save(PackageSubVM.Instance.szDifferentOutPath + @"\" + szLastVersion + "-" + PackageSubVM.Instance.Version + ".xml");
             // save to version file
             this.saveCurrentVersion();
+            return szLastVersion;
         }
-        
+
         //================================================ use svn ================================================
         //获取最大的版本号, 保存在szLastVersion
         public void getLastVersion()
@@ -118,7 +112,7 @@ namespace DragAndRun.FileFilter
 
             long fileSizes = 0;
             int index = 0;
-            string[] szFilter = PackageSubVM.Instance.Filter.Split(new char[1] { ':' });
+            string[] szFilter = PackageSubVM.Instance.Filter.Split(new char[1] { ';' });
             SvnClient svnClient = new SvnClient();
             //List<SvnDiffSummaryEventArgs> list;
             System.Collections.ObjectModel.Collection<SvnDiffSummaryEventArgs> list;
@@ -130,7 +124,7 @@ namespace DragAndRun.FileFilter
                     continue;
                 }
 
-                string fullFileName = szResourceOutPath + "\\" + item.Path;
+                string fullFileName = PackageSubVM.Instance.szResourceOutPath + "\\" + item.Path;
                 if (item.NodeKind == SvnNodeKind.Directory)
                 {
                     if (Directory.Exists(fullFileName) == false)
@@ -204,31 +198,49 @@ namespace DragAndRun.FileFilter
 
         private void encodeResource()
         {
-            FileEncode.Instance.updateDescription("\n开始加密输出的资源");
-            FileEncode.Instance.encodeLua(szResourceOutPath, szResourceOutPath);
-            FileEncode.Instance.encodeImage(szResourceOutPath, szResourceOutPath);
-            string preStr = "Android分包";
-            if (!PackageSubVM.Instance.PackageAndroid)
-            {
-                preStr = "IOS分包";
-            }
-            FileEncode.Instance.updateDescription("\n" + preStr + "完成加密.");
+            GlobalVM.Instance.updateDescription("\n开始加密输出的资源");
+            FileEncode.Instance.encodeLua(PackageSubVM.Instance.szResourceOutPath, PackageSubVM.Instance.szResourceOutPath);
+            FileEncode.Instance.encodeImage(PackageSubVM.Instance.szResourceOutPath, PackageSubVM.Instance.szResourceOutPath);
+        }
+
+        private void encodeResource_delegate()
+        {
+            bool bIsEncoding = true;
+            GlobalVM.Instance.updateDescription("\n开始加密输出的资源");
+            FileEncode.Instance.encodeLua(PackageSubVM.Instance.szResourceOutPath, PackageSubVM.Instance.szResourceOutPath,
+                (n) => { bIsEncoding = false; });
+            while (bIsEncoding)
+                System.Threading.Thread.Sleep(500);
+            bIsEncoding = true;
+            FileEncode.Instance.encodeImage(PackageSubVM.Instance.szResourceOutPath, PackageSubVM.Instance.szResourceOutPath,
+                    (n) =>
+                    {
+                        string preStr = "Android分包";
+                        if (!PackageSubVM.Instance.PackageAndroid)
+                        {
+                            preStr = "IOS分包";
+                        }
+                        GlobalVM.Instance.updateDescription("\n" + preStr + "完成加密.");
+                        bIsEncoding = false;
+                    });
+            while(bIsEncoding)
+                System.Threading.Thread.Sleep(500);
         }
 
         private void zipOutPutResource()
         {
-            FileEncode.Instance.updateDescription("\n开始压缩文件:");
+            GlobalVM.Instance.updateDescription("\n开始压缩文件:");
             string outFileFullName = "";
-            if (System.IO.Directory.Exists(szResourceOutPath))
+            if (System.IO.Directory.Exists(PackageSubVM.Instance.szResourceOutPath))
             {
                 //add to zip
                 string executeFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
                 executeFilePath = System.IO.Path.GetDirectoryName(executeFilePath);
                 executeFilePath = executeFilePath + @"\WinRAR";
-                outFileFullName = string.Format(@"{0}\{1}-{2}.zip", szDifferentOutPath, szLastVersion, PackageSubVM.Instance.Version);
+                outFileFullName = string.Format(@"{0}\{1}-{2}.zip", PackageSubVM.Instance.szDifferentOutPath, szLastVersion, PackageSubVM.Instance.Version);
                 Process p = new Process();
                 p.StartInfo.FileName = executeFilePath;
-                p.StartInfo.Arguments = string.Format(@"m -r -afzip -ed -m3 -ep1 {0} {1}", outFileFullName, szResourceOutPath + @"\*");
+                p.StartInfo.Arguments = string.Format(@"m -r -afzip -ed -m3 -ep1 {0} {1}", outFileFullName, PackageSubVM.Instance.szResourceOutPath + @"\*");
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.RedirectStandardInput = true;
                 p.StartInfo.RedirectStandardError = false;
@@ -242,63 +254,62 @@ namespace DragAndRun.FileFilter
                 }
                 p.Close();
                 p.Dispose();
-                System.IO.Directory.Delete(szResourceOutPath, true);
+                System.IO.Directory.Delete(PackageSubVM.Instance.szResourceOutPath, true);
             }
             else
             {
-                FileEncode.Instance.updateDescription("\n没有文件.:");
+                GlobalVM.Instance.updateDescription("\n没有文件.:");
             }
-            FileEncode.Instance.updateDescription("\n压缩文件完成:" + outFileFullName);
+            GlobalVM.Instance.updateDescription("\n压缩文件完成:" + outFileFullName);
         }
 
         private void saveCurrentVersion()
-        {
-            // new: save version to file
-            string content = "";
-            if (System.IO.File.Exists(PackageSubVM.Instance.OutPath + @"\versions"))
             {
-                StreamReader sr = new StreamReader(PackageSubVM.Instance.OutPath + @"\versions");
-                while (sr.Peek() > 0)
+                // new: save version to file
+                string content = "";
+                if (System.IO.File.Exists(PackageSubVM.Instance.OutPath + @"\versions"))
                 {
-                    string line = sr.ReadLine();
-                    if (!line.Contains(PackageSubVM.Instance.Version))
+                    StreamReader sr = new StreamReader(PackageSubVM.Instance.OutPath + @"\versions");
+                    while (sr.Peek() > 0)
                     {
-                        content += line + "\n";
+                        string line = sr.ReadLine();
+                        if (!line.Contains(PackageSubVM.Instance.Version))
+                        {
+                            content += line + "\n";
+                        }
+                        else
+                        {
+                            MessageBox.Show("注意, 这是重复的版本号!!!");
+                        }
                     }
-                    else
+                    sr.Close();
+                }
+                else
+                {
+                    FileStream file = System.IO.File.Create(PackageSubVM.Instance.OutPath + @"\versions");
+                    file.Close();
+                }
+
+                using (FileStream fs = new FileStream(PackageSubVM.Instance.OutPath + @"\versions", FileMode.Truncate, FileAccess.Write))
+                {
+                    using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
                     {
-                        MessageBox.Show("注意, 这是重复的版本号!!!");
+                        string outString = "version:" + PackageSubVM.Instance.Version;
+                        if (PackageSubVM.Instance.RemoveMEDebug)
+                        {
+                            outString += "," + "RemoveMEDebug";
+                        }
+                        //                     if (window.removeAll.IsChecked == true)
+                        //                     {
+                        //                         outString += "," + "RemoveAll";
+                        //                     }
+                        if (PackageSubVM.Instance.NeedReInstall == true)
+                        {
+                            outString += "," + "NeedReInstall:" + PackageSubVM.Instance.ReInstallURL + " ";
+                        }
+                        sw.Write(content + outString + ";\n");
                     }
                 }
-                sr.Close();
             }
-            else
-            {
-                FileStream file = System.IO.File.Create(PackageSubVM.Instance.OutPath + @"\versions");
-                file.Close();
-            }
-
-            using (FileStream fs = new FileStream(PackageSubVM.Instance.OutPath + @"\versions", FileMode.Truncate, FileAccess.Write))
-            {
-                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
-                {
-                    string outString = "version:" + PackageSubVM.Instance.Version;
-                    if (PackageSubVM.Instance.RemoveMEDebug)
-                    {
-                        outString += "," + "RemoveMEDebug";
-                    }
-//                     if (window.removeAll.IsChecked == true)
-//                     {
-//                         outString += "," + "RemoveAll";
-//                     }
-                    if (PackageSubVM.Instance.NeedReInstall == true)
-                    {
-                        outString += "," + "NeedReInstall:" + PackageSubVM.Instance.ReInstallURL + " ";
-                    }
-                    sw.Write(content + outString + ";\n");
-                }
-            }
-        }
-
     }
 }
