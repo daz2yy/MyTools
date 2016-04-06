@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Threading;
 using DragAndRun.Utils;
 using DragAndRun.ViewModule;
+using DragAndRun.View;
 
 namespace DragAndRun
 {
@@ -89,7 +90,6 @@ namespace DragAndRun
         private void loadData(string configName)
         {
             PackageSubVM.Instance.loadData(configName);
-            this.subEncodIOSBtn.IsChecked = !PackageSubVM.Instance.PackageAndroid;
             _ListViewItems = new List<Config>();
             for (int i = 0; i < _configFiles.Count; i++)
             {
@@ -138,6 +138,9 @@ namespace DragAndRun
             _configFiles.Add(this.comNewConfigName.Text);
             this.comNewConfigName.Text = "";
             this.comConfigList.SelectedIndex = _ListViewItems.Count - 1;
+            //open setting 
+            Window dialog = new PackageSetting();
+            dialog.ShowDialog();
         }
 
         private void conDeleteConfig_Click(object sender, RoutedEventArgs e)

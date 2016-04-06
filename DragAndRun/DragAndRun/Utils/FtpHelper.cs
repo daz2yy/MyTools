@@ -85,7 +85,7 @@ namespace DragAndRun.Utils
         }
         Dictionary<string, string> errorDict = new Dictionary<string,string>();
 
-        // http 
+        // http 蓝汛CDN
         public string httpRequest(string type, string url, string jsonContent)
         {
 //             string resultStr = "{\"r_id\": \"568f5ae9949e6b7086f46496\" }";
@@ -99,7 +99,7 @@ namespace DragAndRun.Utils
                 try
                 {
                     jsonContent = "{\n";
-                    jsonContent = jsonContent + String.Format("\"username\" : \"{0}\", \"password\" : \"{1}\", \"task\" : ", GlobalVM.Instance.CDNUserName, GlobalVM.Instance.CDNPassword);
+                    jsonContent = jsonContent + String.Format("\"username\" : \"{0}\", \"password\" : \"{1}\", \"task\" : ", PackageSubVM.Instance.CDNUserName, PackageSubVM.Instance.CDNPassword);
                     jsonContent = jsonContent + "{\n";
                     jsonContent = jsonContent + String.Format("\"urls\" : [");
                     string[] urls = url.Split(';');
@@ -144,7 +144,7 @@ namespace DragAndRun.Utils
             {
                 jsonResult result = JsonConvert.DeserializeObject<jsonResult>(jsonContent);
                 urlAPI = "https://r.chinacache.com/content/refresh/" + result.id;
-                urlAPI = urlAPI + String.Format("?username={0}&password={1}&r_id={2}", GlobalVM.Instance.CDNUserName, GlobalVM.Instance.CDNPassword, result.id);
+                urlAPI = urlAPI + String.Format("?username={0}&password={1}&r_id={2}", PackageSubVM.Instance.CDNUserName, PackageSubVM.Instance.CDNPassword, result.id);
                 string res;
                 bool bIsOK = false;
                 using (WebClient client = new WebClient())
@@ -193,8 +193,8 @@ namespace DragAndRun.Utils
         }
         public string TencentCDNRequest(string url)
         {
-            url = "http://sqsj.cdn.7road.net/testTXCDN.log";
-            FileEncode.Instance.executeFile("D:/1temp/CDN_tx_API", url);
+//             url = "http://sqsj.cdn.7road.net/testTXCDN.log";
+//             FileEncode.Instance.executeFile("D:/1temp/CDN_tx_API", url);
             using (WebClient client = new WebClient())
             {
                 try

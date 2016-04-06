@@ -28,6 +28,9 @@
         <ObjectDataProvider x:Key="FlushCDN" ObjectType="{x:Type vm:PackageSubVM}"></ObjectDataProvider>
         <ObjectDataProvider x:Key="CheckFlushResult" ObjectType="{x:Type vm:PackageSubVM}"></ObjectDataProvider>
         <ObjectDataProvider x:Key="GeneralUpdatePackage" ObjectType="{x:Type vm:PackageSubVM}"></ObjectDataProvider>
+        <ObjectDataProvider x:Key="OpenSettingDialog" ObjectType="{x:Type vm:PackageSubVM}"></ObjectDataProvider>
+        <vm:RadioButtonConverter x:Key="radioConverter"/>
+        <vm:ButtonEnabelConverter x:Key="buttonConverter"/>
     </Window.Resources>
     <Grid>
         <DockPanel Width="Auto" Height="28" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0">
@@ -36,7 +39,7 @@
                 <MenuItem Header="_About" Click="MenuAbout_Click"></MenuItem>
             </Menu>
         </DockPanel>
-        <Grid Name="comLoadingPanel" Panel.ZIndex="1" Visibility="{Binding LoadingPanel}">
+        <Grid Name="comLoadingPanel" Panel.ZIndex="0" Visibility="{Binding LoadingPanel}">
             <Grid Background="Gray" Opacity="0.5">
             </Grid>
             <Label FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center">处理中...</Label>
@@ -148,34 +151,38 @@
                     <TextBox Name="comBeginVersion" Grid.Column="2" Margin="112,1,341,589" Grid.Row="1" Text="{Binding BeginVersion}"/>
                     <TextBlock Grid.Column="2" Margin="235,5,131,406" Grid.Row="1">结束版本号:</TextBlock>
                     <TextBox Name="comEndVersion" Grid.Column="2" Margin="301,2,146,589" Grid.Row="1" Text="{Binding EndVersion}"/>
-                    <TextBlock Grid.Column="2" Margin="37,34,329,377" Grid.Row="1">资源svn地址:</TextBlock>
-                    <TextBox Name="comSVNPath" Grid.Column="2" Margin="112,31,0,557" Grid.Row="1" Text="{Binding SVNPath}"></TextBox>
+                    <!--<TextBlock Grid.Column="2" Margin="37,34,329,377" Grid.Row="1">资源svn地址:</TextBlock>
+                    <TextBox Name="comSVNPath" Grid.Column="2" Margin="112,31,0,557" Grid.Row="1" Text="{Binding SVNPath}"></TextBox>-->
 
-                    <RadioButton Name="subEncodAndroidBtn" GroupName="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="37,7,0,0" Height="27" Width="201" Grid.Column="2" FontSize="20" IsChecked="{Binding PackageAndroid}">打Android包</RadioButton>
-                    <RadioButton Name="subEncodIOSBtn" GroupName="2" Margin="291,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="201" Grid.Column="2" FontSize="20">打IOS包</RadioButton>
+                    <Button FontSize="20" Margin="52,0,31,582" Grid.Column="1" Command="{Binding Path=OpenSettingDialog, Source={StaticResource OpenSettingDialog}}" Grid.Row="1">
+                        设置
+                    </Button>
+                    
+                    <!--<RadioButton Name="subEncodAndroidBtn" GroupName="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="37,7,0,0" Height="27" Width="201" Grid.Column="2" FontSize="20" IsChecked="{Binding PackageAndroid}">打Android包</RadioButton>
+                    <RadioButton Name="subEncodIOSBtn" GroupName="2" Margin="291,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="201" Grid.Column="2" FontSize="20" IsChecked="{Binding PackageAndroid, Converter={StaticResource radioConverter}}">打IOS包</RadioButton>-->
 
                     <TextBlock Margin="10,63,0,239" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="206" Grid.Column="1">版本号(字符串比较时,必须比之前的大):</TextBlock>
                     <TextBox Name="comVersionPath" Margin="41,63,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding Version}"/>
 
-                    <Button Name="comOpenOutPath" Margin="0,88,508,507" Grid.Row="1" Grid.Column="2" Command="{Binding Path=OpenOutPutPath, Source={StaticResource OpenOutPutPath}}">
+                    <Button Name="comOpenOutPath" Margin="0,102,508,493" Grid.Row="1" Grid.Column="2" Command="{Binding Path=OpenOutPutPath, Source={StaticResource OpenOutPutPath}}">
                         ...
                     </Button>
-                    <TextBlock Margin="140,90,0,212" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="75" Grid.Column="1">输出文件路径:</TextBlock>
-                    <TextBox Name="comOutPath" Margin="41,90,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding OutPath}"/>
+                    <TextBlock Margin="140,104,0,198" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="75" Grid.Column="1">输出文件路径:</TextBlock>
+                    <TextBox Name="comOutPath" Margin="41,104,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding OutPath}"/>
 
-                    <TextBlock Margin="2,120,0,182" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="220" Grid.Column="1">需要过滤的文件名或文件名后缀(分号分隔):</TextBlock>
-                    <TextBox x:Name="comFilter" Margin="40,120,1,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding Filter}"/>
+                    <!--<TextBlock Margin="2,120,0,182" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="220" Grid.Column="1">需要过滤的文件名或文件名后缀(分号分隔):</TextBlock>
+                    <TextBox x:Name="comFilter" Margin="40,120,1,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding Filter}"/>-->
 
-                    <CheckBox Name="removeDebug" Margin="114,156,521,437" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Visibility="Visible" IsChecked="{Binding RemoveMEDebug}">删除MEDebug</CheckBox>
+                    <CheckBox Name="removeDebug" Margin="114,148,521,445" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Visibility="Visible" IsChecked="{Binding RemoveMEDebug}">删除MEDebug</CheckBox>
                     <CheckBox Name="removeAll" Margin="41,268,317,325" Grid.Column="2" Grid.Row="1" Visibility="Hidden">删除包下所有文件</CheckBox>
                     <CheckBox Name="needInstall" Margin="114,183,521,415" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" IsChecked="{Binding NeedReInstall}">需要重下安装包</CheckBox>
                     <TextBox x:Name="comPackageURL" Margin="41,183,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding ReInstallURL}"/>
                     
-                    <TextBlock Margin="98,211,0,387" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="117" Grid.Column="1">上传版本文件根目录:</TextBlock>
-                    <TextBox Margin="41,211,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding UploadVersionUrl}"/>
+                    <!--<TextBlock Margin="98,211,0,387" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="117" Grid.Column="1">上传版本文件根目录:</TextBlock>
+                    <TextBox Margin="41,211,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding UploadVersionUrl}"/>-->
 
-                    <TextBlock Margin="73,237,0,361" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="142" Grid.Column="1">CDN刷新文件(分号分隔):</TextBlock>
-                    <TextBox Margin="41,237,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding FlushCDNUrl}"/>
+                    <!--<TextBlock Margin="73,237,0,361" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="142" Grid.Column="1">CDN刷新文件(分号分隔):</TextBlock>
+                    <TextBox Margin="41,237,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding FlushCDNUrl}"/>-->
 
                     <TextBox Name="Description" IsEnabled="True" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding Description}"
                              ScrollViewer.VerticalScrollBarVisibility="Auto" 
@@ -184,13 +191,13 @@
                     <Button FontSize="30" Command="{Binding Path=GeneralUpdatePackage, Source={StaticResource GeneralUpdatePackage}}" Grid.Column="2" Margin="84,264,276,307" Grid.Row="1">
                         开始生成
                     </Button>
-                    <Button FontSize="30" Command="{Binding Path=UploadFileToCDN, Source={StaticResource UploadFileToCDN}}" Grid.Column="1" Margin="73,332,508,239" Grid.Row="1" Grid.ColumnSpan="2">
+                    <Button FontSize="30" Command="{Binding Path=UploadFileToCDN, Source={StaticResource UploadFileToCDN}}" Grid.Column="1" Margin="73,332,508,239" Grid.Row="1" Grid.ColumnSpan="2" IsEnabled="{Binding Path=UploadVersionUrl, Converter={StaticResource buttonConverter}}">
                         上传更新包
                     </Button>
-                    <Button FontSize="30" Command="{Binding Path=FlushCDN, Source={StaticResource FlushCDN}}" Grid.Column="2" Margin="84,332,276,239" Grid.Row="1">
+                    <Button FontSize="30" Command="{Binding Path=FlushCDN, Source={StaticResource FlushCDN}}" Grid.Column="2" Margin="84,332,276,239" Grid.Row="1" IsEnabled="{Binding Path=IsUseCDN}">
                         刷新CDN
                     </Button>
-                    <Button FontSize="30" Command="{Binding Path=CheckFlushResult, Source={StaticResource CheckFlushResult}}" Grid.Column="2" Margin="323,333,37,238" Grid.Row="1">
+                    <Button FontSize="30" Command="{Binding Path=CheckFlushResult, Source={StaticResource CheckFlushResult}}" Grid.Column="2" Margin="323,333,37,238" Grid.Row="1" IsEnabled="{Binding Path=IsUseCDN}">
                         查询刷新结果
                     </Button>
                 </Grid>

@@ -14,6 +14,10 @@ using System.Windows;
 using System.Windows.Input;
 using System.Xml;
 using DragAndRun.Module;
+using DragAndRun.View;
+using System.Windows.Data;
+using System.Globalization;
+using System.Collections.ObjectModel;
 
 namespace DragAndRun.ViewModule
 {
@@ -21,6 +25,10 @@ namespace DragAndRun.ViewModule
     {
         public PackageSubVM()
         {
+            this.CDNList = new ObservableCollection<string>();
+            this.CDNList.Add("无");
+            this.CDNList.Add("腾讯CDN");
+            this.CDNList.Add("蓝汛CDN");
         }
         #region  数据绑定
         public event PropertyChangedEventHandler PropertyChanged;
@@ -66,7 +74,7 @@ namespace DragAndRun.ViewModule
                 OnPropertyChanged("PackageAndroid");
             }
         }
-        
+
         private string _svnPath;
         public string SVNPath
         {
@@ -185,9 +193,87 @@ namespace DragAndRun.ViewModule
             }
         }
 
+        private bool _isUseCDN = false;
+        public bool IsUseCDN
+        {
+            get { return _isUseCDN; }
+            set
+            {
+                _isUseCDN = value;
+                GlobalVM.Instance.EncodeAndroid = value;
+                OnPropertyChanged("IsUseCDN");
+            }
+        }
+
+        private string _cndUserName = "sqsj";
+        public string CDNUserName
+        {
+            get { return _cndUserName; }
+            set { _cndUserName = value; OnPropertyChanged("CDNUserName"); }
+        }
+
+        private string _cdnPassword = "Abc@123";
+        public string CDNPassword
+        {
+            get { return _cdnPassword; }
+            set { _cdnPassword = value; OnPropertyChanged("CDNPassword"); }
+        }
+
+        private ObservableCollection<string> _CDNList;
+        public ObservableCollection<string> CDNList
+        {
+            get { return _CDNList; }
+            set { _CDNList = value; OnPropertyChanged("CDNList"); }
+        }
+
+        private string _CDNCompany = "无";
+        public string CDNCompany
+        {
+            get { return _CDNCompany; }
+            set 
+            { 
+                _CDNCompany = value; 
+                OnPropertyChanged("CDNCompany");
+                if (value == "无" || value == "")
+                    PackageSubVM.Instance.IsUseCDN = false;
+                else
+                    PackageSubVM.Instance.IsUseCDN = true;
+            }
+        }
+
         public void updateDescription(string str)
         {
             Description = str + "\n" + Description;
+        }
+
+        //打开设置界面
+        private Window SettingDialog = null;
+        private ICommand _openSettingDialog;
+        public ICommand OpenSettingDialog
+        {
+            get
+            {
+                if (_openSettingDialog == null)
+                {
+                    _openSettingDialog = new OpenSettingDialogCommand();
+                }
+                return _openSettingDialog;
+            }
+            set { _openSettingDialog = value; }
+        }
+
+        private class OpenSettingDialogCommand : ICommand
+        {
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+            public event EventHandler CanExecuteChanged;
+            public void Execute(object parameter)
+            {
+                PackageSubVM.Instance.SettingDialog = new PackageSetting();
+                PackageSubVM.Instance.SettingDialog.ShowDialog();
+            }
         }
         
         // 打开导出目录
@@ -375,7 +461,37 @@ namespace DragAndRun.ViewModule
                 logic.doGenerate();
             }
         }
-        
+
+        private ICommand _settingOK;
+        public ICommand SettingOK
+        {
+            get
+            {
+                if (_settingOK == null)
+                {
+                    _settingOK = new SettingOKCommand();
+                }
+                return _settingOK;
+            }
+            set { _settingOK = value; }
+        }
+        private class SettingOKCommand : ICommand
+        {
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+            public event EventHandler CanExecuteChanged;
+            public void Execute(object parameter)
+            {
+                if (PackageSubVM.Instance.SVNPath == "")
+                {
+                    MessageBox.Show("SVN 路径不能为空!");
+                    return;
+                }
+                PackageSubVM.Instance.SettingDialog.Close();
+            }
+        }
         #endregion
 
         #region  界面数据初始化
@@ -390,6 +506,10 @@ namespace DragAndRun.ViewModule
             SaveData.GetInstance().setData("szBeginVersion", PackageSubVM.Instance.BeginVersion);
             SaveData.GetInstance().setData("szEndVersion", PackageSubVM.Instance.EndVersion);
             SaveData.GetInstance().setData("szEncodeType", PackageSubVM.Instance.PackageAndroid.ToString());
+            SaveData.GetInstance().setData("IsUseCDN", PackageSubVM.Instance.IsUseCDN.ToString());
+            SaveData.GetInstance().setData("szCDNUserName", PackageSubVM.Instance.CDNUserName);
+            SaveData.GetInstance().setData("szCDNPassword", PackageSubVM.Instance.CDNPassword);
+            SaveData.GetInstance().setData("szCDNCompany", PackageSubVM.Instance.CDNCompany);
         }
 
         public void loadData(string configName)
@@ -404,7 +524,36 @@ namespace DragAndRun.ViewModule
             PackageSubVM.Instance.BeginVersion = SaveData.GetInstance().getData("szBeginVersion");
             PackageSubVM.Instance.EndVersion = SaveData.GetInstance().getData("szEndVersion");
             PackageSubVM.Instance.PackageAndroid = SaveData.GetInstance().getData("szEncodeType") == "True";
+            PackageSubVM.Instance.IsUseCDN = SaveData.GetInstance().getData("IsUseCDN") == "True";
+            PackageSubVM.Instance.CDNUserName = SaveData.GetInstance().getData("szCDNUserName");
+            PackageSubVM.Instance.CDNPassword = SaveData.GetInstance().getData("szCDNPassword");
+            PackageSubVM.Instance.CDNCompany = SaveData.GetInstance().getData("szCDNCompany");
         }
         #endregion
+    }
+
+    //[ValueConversion(typeof(bool), typeof(bool))]
+    public class RadioButtonConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return !(bool)value;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return !(bool)value;
+        }
+    }
+
+    public class ButtonEnabelConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return !string.IsNullOrEmpty(value as String);
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return !string.IsNullOrEmpty(value as String);
+        }
     }
 }

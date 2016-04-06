@@ -50,20 +50,6 @@ namespace DragAndRun.ViewModule
             set { _type = value; }
         }
 
-        private string _cndUserName = "sqsj";
-        public string CDNUserName
-        {
-            get { return _cndUserName; }
-            set { _cndUserName = value; OnPropertyChanged("CDNUserName"); }
-        }
-
-        private string _cdnPassword = "Abc@123";
-        public string CDNPassword
-        {
-            get { return _cdnPassword; }
-            set { _cdnPassword = value; OnPropertyChanged("CDNPassword"); }
-        }
-
         //static public SynchronizationContext syncContext;
         //public method
         public void updateDescription(string msg)
