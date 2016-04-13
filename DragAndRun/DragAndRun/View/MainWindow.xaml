@@ -42,7 +42,7 @@
         <Grid Name="comLoadingPanel" Panel.ZIndex="0" Visibility="{Binding LoadingPanel}">
             <Grid Background="Gray" Opacity="0.5">
             </Grid>
-            <Label FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center">处理中...</Label>
+            <Label FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="398,277,398,417">处理中...</Label>
         </Grid>
         <TabControl Margin="0,28,0,-3">
             <TabControl.Template>
@@ -147,37 +147,38 @@
                         </ListView.View>
                     </ListView>
                     
-                    <TextBlock Grid.Column="2" Margin="40,5,326,406" Grid.Row="1">开始版本号:</TextBlock>
-                    <TextBox Name="comBeginVersion" Grid.Column="2" Margin="112,1,341,589" Grid.Row="1" Text="{Binding BeginVersion}"/>
-                    <TextBlock Grid.Column="2" Margin="235,5,131,406" Grid.Row="1">结束版本号:</TextBlock>
-                    <TextBox Name="comEndVersion" Grid.Column="2" Margin="301,2,146,589" Grid.Row="1" Text="{Binding EndVersion}"/>
+                    <TextBlock Grid.Column="2" Margin="40,5,326,476" Grid.RowSpan="2">开始版本号:</TextBlock>
+                    <TextBox Name="comBeginVersion" Grid.Column="2" Margin="112,1,341,39" Text="{Binding BeginVersion}"/>
+                    <TextBlock Grid.Column="2" Margin="235,5,131,476" Grid.RowSpan="2">结束版本号:</TextBlock>
+                    <TextBox Name="comEndVersion" Grid.Column="2" Margin="316,0,131,39" Text="{Binding EndVersion}"/>
                     <!--<TextBlock Grid.Column="2" Margin="37,34,329,377" Grid.Row="1">资源svn地址:</TextBlock>
                     <TextBox Name="comSVNPath" Grid.Column="2" Margin="112,31,0,557" Grid.Row="1" Text="{Binding SVNPath}"></TextBox>-->
 
-                    <Button FontSize="20" Margin="52,0,31,582" Grid.Column="1" Command="{Binding Path=OpenSettingDialog, Source={StaticResource OpenSettingDialog}}" Grid.Row="1">
+                    <Button FontSize="20" Margin="52,0,31,32" Grid.Column="1" Command="{Binding Path=OpenSettingDialog, Source={StaticResource OpenSettingDialog}}">
                         设置
                     </Button>
                     
                     <!--<RadioButton Name="subEncodAndroidBtn" GroupName="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="37,7,0,0" Height="27" Width="201" Grid.Column="2" FontSize="20" IsChecked="{Binding PackageAndroid}">打Android包</RadioButton>
                     <RadioButton Name="subEncodIOSBtn" GroupName="2" Margin="291,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="201" Grid.Column="2" FontSize="20" IsChecked="{Binding PackageAndroid, Converter={StaticResource radioConverter}}">打IOS包</RadioButton>-->
 
-                    <TextBlock Margin="10,63,0,239" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="206" Grid.Column="1">版本号(字符串比较时,必须比之前的大):</TextBlock>
-                    <TextBox Name="comVersionPath" Margin="41,63,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding Version}"/>
+                    <TextBlock Margin="10,63,0,309" TextAlignment="Right" HorizontalAlignment="Left" Width="206" Grid.Column="1" Grid.RowSpan="2">版本号(字符串比较时,必须比之前的大):</TextBlock>
+                    <TextBox Name="comVersionPath" Margin="41,63,0,0" VerticalAlignment="Top" Grid.Column="2" Height="22" Text="{Binding Version}" Grid.RowSpan="2"/>
 
-                    <Button Name="comOpenOutPath" Margin="0,102,508,493" Grid.Row="1" Grid.Column="2" Command="{Binding Path=OpenOutPutPath, Source={StaticResource OpenOutPutPath}}">
+                    <Button Name="comOpenOutPath" Margin="0,32,508,563" Grid.Row="1" Grid.Column="2" Command="{Binding Path=OpenOutPutPath, Source={StaticResource OpenOutPutPath}}">
                         ...
                     </Button>
-                    <TextBlock Margin="140,104,0,198" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="75" Grid.Column="1">输出文件路径:</TextBlock>
-                    <TextBox Name="comOutPath" Margin="41,104,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding OutPath}"/>
+                    <TextBlock Margin="140,34,0,268" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="75" Grid.Column="1">输出文件路径:</TextBlock>
+                    <TextBox Name="comOutPath" Margin="41,34,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding OutPath}"/>
 
                     <!--<TextBlock Margin="2,120,0,182" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="220" Grid.Column="1">需要过滤的文件名或文件名后缀(分号分隔):</TextBlock>
                     <TextBox x:Name="comFilter" Margin="40,120,1,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding Filter}"/>-->
 
-                    <CheckBox Name="removeDebug" Margin="114,148,521,445" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Visibility="Visible" IsChecked="{Binding RemoveMEDebug}">删除MEDebug</CheckBox>
+                    <CheckBox Name="removeDebug" Margin="114,78,521,515" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Visibility="Visible" IsChecked="{Binding RemoveMEDebug}">删除MEDebug</CheckBox>
                     <CheckBox Name="removeAll" Margin="41,268,317,325" Grid.Column="2" Grid.Row="1" Visibility="Hidden">删除包下所有文件</CheckBox>
-                    <CheckBox Name="needInstall" Margin="114,183,521,415" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" IsChecked="{Binding NeedReInstall}">需要重下安装包</CheckBox>
-                    <TextBox x:Name="comPackageURL" Margin="41,183,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding ReInstallURL}"/>
-                    
+                    <CheckBox Name="needInstall" Margin="114,113,521,485" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" IsChecked="{Binding NeedReInstall}">需要重下安装包</CheckBox>
+                    <TextBox Name="comPackageURL" Margin="41,113,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding ReInstallURL}"/>
+
+                    <TextBlock Name="settingDesc" FontSize="22" Grid.ColumnSpan="2" Grid.Column="1" Margin="2,135,0,356" Grid.Row="1" Text="{Binding SettingDesc}" ></TextBlock>
                     <!--<TextBlock Margin="98,211,0,387" TextAlignment="Right" HorizontalAlignment="Left" Grid.Row="1" Width="117" Grid.Column="1">上传版本文件根目录:</TextBlock>
                     <TextBox Margin="41,211,0,0" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Height="22" Text="{Binding UploadVersionUrl}"/>-->
 

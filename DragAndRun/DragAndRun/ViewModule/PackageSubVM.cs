@@ -71,6 +71,7 @@ namespace DragAndRun.ViewModule
             set { 
                 _packageAndroid = value;
                 GlobalVM.Instance.EncodeAndroid = value;
+                PackageSubVM.Instance.updateSettingDescription();
                 OnPropertyChanged("PackageAndroid");
             }
         }
@@ -180,7 +181,11 @@ namespace DragAndRun.ViewModule
         public string UploadVersionUrl
         {
             get { return _uploadVersionUrl; }
-            set { _uploadVersionUrl = value; OnPropertyChanged("UploadVersionUrl"); }
+            set {
+                _uploadVersionUrl = value;
+                PackageSubVM.Instance.updateSettingDescription();
+                OnPropertyChanged("UploadVersionUrl"); 
+            }
         }
 
         private string _description;
@@ -200,7 +205,7 @@ namespace DragAndRun.ViewModule
             set
             {
                 _isUseCDN = value;
-                GlobalVM.Instance.EncodeAndroid = value;
+                PackageSubVM.Instance.updateSettingDescription();
                 OnPropertyChanged("IsUseCDN");
             }
         }
@@ -238,6 +243,29 @@ namespace DragAndRun.ViewModule
                     PackageSubVM.Instance.IsUseCDN = false;
                 else
                     PackageSubVM.Instance.IsUseCDN = true;
+            }
+        }
+
+        private string _SettingDesc = "";
+        public string SettingDesc
+        {
+            get { return _SettingDesc; }
+            set { _SettingDesc = value; OnPropertyChanged("SettingDesc"); }
+        }
+        //更新配置信息
+        public void updateSettingDescription()
+        {
+            PackageSubVM.Instance.SettingDesc = "配置信息:\n" 
+                + "加密方式:\t" + (GlobalVM.Instance.EncodeAndroid ? "Android" : "iOS");
+            if (PackageSubVM.Instance.UploadVersionUrl != "")
+            {
+                PackageSubVM.Instance.SettingDesc = PackageSubVM.Instance.SettingDesc
+                    + "\n上传服务器路径:\t" + PackageSubVM.Instance.UploadVersionUrl;
+            }
+            if (PackageSubVM.Instance.IsUseCDN)
+            {
+                PackageSubVM.Instance.SettingDesc = PackageSubVM.Instance.SettingDesc
+                    + "\nCDN厂商:\t" + PackageSubVM.Instance.CDNCompany;
             }
         }
 
@@ -435,7 +463,7 @@ namespace DragAndRun.ViewModule
             }
         }
 
-        // 生成热更包
+        // 开始生成热更包
         private ICommand _generalUpdatePackage;
         public ICommand GeneralUpdatePackage
         {
@@ -457,6 +485,7 @@ namespace DragAndRun.ViewModule
             public event EventHandler CanExecuteChanged;
             public void Execute(object parameter)
             {
+                PackageSubVM.Instance.updateSettingDescription();
                 GenerateUpdatePackage logic = new GenerateUpdatePackage();
                 logic.doGenerate();
             }
