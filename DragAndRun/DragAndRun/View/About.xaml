@@ -10,10 +10,10 @@
             作者: 庄晓达
         </Label>
         <Label Name="version" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="Auto" Margin="0,80,0,0">
-            版本号: 1.4.0
+            版本号: 1.5.0
         </Label>
         <Label Name="buildDate" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="Auto" Margin="0,110,0,0">
-            版本日期: 2016-03-09
+            版本日期: 2016-04-19
         </Label>
         <Label Name="birthday" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="Auto" Margin="0,140,0,0">
             破壳日: 2015-10-01

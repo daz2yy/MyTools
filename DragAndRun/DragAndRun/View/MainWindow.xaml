@@ -39,7 +39,7 @@
                 <MenuItem Header="_About" Click="MenuAbout_Click"></MenuItem>
             </Menu>
         </DockPanel>
-        <Grid Name="comLoadingPanel" Panel.ZIndex="0" Visibility="{Binding LoadingPanel}">
+        <Grid Name="comLoadingPanel" Panel.ZIndex="1" Visibility="{Binding LoadingPanel}">
             <Grid Background="Gray" Opacity="0.5">
             </Grid>
             <Label FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="398,277,398,417">处理中...</Label>
