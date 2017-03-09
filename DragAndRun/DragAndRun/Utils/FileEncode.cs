@@ -39,7 +39,8 @@ namespace DragAndRun.Utils
                     bool bMoveFile = false;
                     string oldPath = "";
 
-                    if (System.IO.Path.GetExtension(inputPath) != "")
+                    //if (System.IO.Path.GetExtension(inputPath) != "")
+                    if (System.IO.File.Exists(inputPath))
                     {
                         if (!System.IO.Directory.Exists(inputPath + "_temp"))
                         {
